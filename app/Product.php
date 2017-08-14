@@ -4,6 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+// Model
+use App\Category;
+use App\Seller;
+use App\Transaction;
+
 class Product extends Model
 {
     const AVAILABLE_PRODUCT = 'product';
@@ -18,7 +23,23 @@ class Product extends Model
         'seller_id'
     ];
 
-    public function isAvailable () {
+    public function isAvailable () 
+    {
         return $this->status == Product::AVAILABLE_PRODUCT;
+    }
+
+    public function categories ()
+    {
+        return $this->belongsToMany(Category::class);
+    }
+
+    public function seller ()
+    {
+        return $this->belongsTo(Seller::class);
+    }
+
+    public function transactions ()
+    {
+        return $this->hasMany(Transaction::class);
     }
 }
