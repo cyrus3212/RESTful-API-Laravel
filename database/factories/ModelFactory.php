@@ -5,6 +5,7 @@ use App\User;
 use App\Category;
 use App\Product;
 use App\Transaction;
+use App\Seller;
 
 /*
 |--------------------------------------------------------------------------
