@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\QueryException;
 
 // use Illuminate\MethodNotAllowedHttpException;
 class Handler extends ExceptionHandler
@@ -80,6 +81,15 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof HttpException) {
             return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
+        }
+
+        if ($exception instanceof QueryException) {
+            // dd($exception);
+            $errorCode = $exception->errorInfo[1];
+
+            if ($errorCode === 1451) {
+                return $this->errorResponse('Cannot remove resource.', 409);
+            }
         }
 
         return parent::render($request, $exception);
