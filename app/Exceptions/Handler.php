@@ -5,11 +5,15 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Validation\ValidationException; //
 use Illuminate\Auth\AuthenticationException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use App\Traits\ApiResponser;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\Access\AuthorizationException;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
+// use Illuminate\MethodNotAllowedHttpException;
 class Handler extends ExceptionHandler
 {
     use ApiResponser;
@@ -64,6 +68,18 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof AuthorizationException) {
             return $this->errorResponse($exception->getMessage(), 403);
+        }
+        
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            return $this->errorResponse('The specified method for request is not valid.', 405);
+        }
+
+        if ($exception instanceof NotFoundHttpException) {
+            return $this->errorResponse('The requested URl can not be found.', 404);
+        }
+
+        if ($exception instanceof HttpException) {
+            return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
         }
 
         return parent::render($request, $exception);
