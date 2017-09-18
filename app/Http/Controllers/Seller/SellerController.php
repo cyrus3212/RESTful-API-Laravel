@@ -18,7 +18,7 @@ class SellerController extends ApiController
     {
         $sellers = Seller::has('products')->get();
 
-        return response()->json(['data' => $sellers], 200);
+        return $this->showAll($sellers);
     }
 
     /**
@@ -48,11 +48,11 @@ class SellerController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Seller $seller)
     {
-        $seller = Seller::has('products')->findOrFail($id);
+        // $seller = Seller::has('products')->findOrFail($id);
 
-        return response()->json(['data' => $seller], 200);
+        return $this->showOne($seller);
     }
 
     /**
@@ -84,7 +84,7 @@ class SellerController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Seller $seller)
     {
         //
     }
