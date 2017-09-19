@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Product;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
+use App\Product;
 
 class ProductController extends ApiController
 {
@@ -15,6 +16,8 @@ class ProductController extends ApiController
     public function index()
     {
         //
+        $product = Product::all();
+        return $this->showAll($product);
     }
 
     /**
@@ -44,9 +47,10 @@ class ProductController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
         //
+        return $this->showOne($product);
     }
 
     /**
@@ -55,7 +59,7 @@ class ProductController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Product $product)
     {
         //
     }
@@ -78,7 +82,7 @@ class ProductController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
         //
     }
