@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 
 // Buyer
 Route::resource('buyers', 'Buyer\BuyerController', ['only' => ['index', 'show']]);
+Route::resource('buyers.transactions', 'Buyer\BuyerTransactionController', ['only' => ['index']]);
 
 // Category
 Route::resource('categories', 'Category\CategoryController', ['except' => ['create', 'edit']]);
