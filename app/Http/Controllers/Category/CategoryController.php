@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Category;
 
+use App\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
 
@@ -15,6 +16,8 @@ class CategoryController extends ApiController
     public function index()
     {
         //
+        $category = Category::all();
+        return $this->showAll($category);
     }
 
     /**
@@ -36,6 +39,15 @@ class CategoryController extends ApiController
     public function store(Request $request)
     {
         //
+        $rules = [
+            'name' => 'required',
+            'description' => 'required'
+        ];
+
+        $this->validate($request, $rules);
+        $newCategory = Category::create($request->all());
+
+        return $this->showOne($newCategory, 201);
     }
 
     /**
@@ -44,9 +56,10 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
         //
+        return $this->showOne($category);
     }
 
     /**
@@ -67,9 +80,23 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
         //
+        $category->fill(
+            $request->intersect([
+                'name',
+                'description'
+            ])
+        );
+
+        if (!$category->isDirty()) {
+            return $this->errorResponse('You need specify any different value to update.', 422);
+        }
+
+        $category->save();
+
+        return $this->showOne($category);
     }
 
     /**
@@ -78,8 +105,10 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
         //
+        $category->delete();
+        return $this->showOne($category);
     }
 }
