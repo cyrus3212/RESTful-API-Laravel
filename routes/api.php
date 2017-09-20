@@ -1,6 +1,5 @@
 <?php
-
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +35,7 @@ Route::resource('products', 'Product\ProductController', ['only' => ['index', 's
 
 // Seller
 Route::resource('sellers', 'Seller\SellerController', ['only' => ['index', 'show']]);
+Route::resource('sellers.transactions', 'Seller\SellerTransactionController', ['only' => ['index', 'show']]);
 
 // Transaction
 Route::resource('transactions', 'Transaction\TransactionController', ['only' => ['index', 'show']]);
