@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Seller;
 
 use App\Seller;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 
-class SellerCategoryController extends Controller
+class SellerCategoryController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -23,6 +23,6 @@ class SellerCategoryController extends Controller
                         ->collapse()
                         ->unique('id')
                         ->values();
-        return $categories;
+        return $this->showAll($categories);
     }
 }
