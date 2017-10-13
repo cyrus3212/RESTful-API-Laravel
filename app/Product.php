@@ -12,7 +12,7 @@ use App\Transaction;
 
 class Product extends Model
 {
-    const AVAILABLE_PRODUCT = 'product';
+    const AVAILABLE_PRODUCT = 'available';
     const UNAVAILABLE_PRODUCT = 'unavailable';
 
     protected $dates = ['deleted_at'];
