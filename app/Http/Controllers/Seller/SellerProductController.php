@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Seller;
 use App\Product;
 use App\Seller;
 use App\User;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Http\Request;
 use App\Http\Controllers\ApiController;
@@ -53,7 +54,7 @@ class SellerProductController extends ApiController
         $data = $request->all();
 
         $data['status'] = Product::UNAVAILABLE_PRODUCT;
-        $data['image'] = '1.jpeg';
+        $data['image'] = $request->image->store('');
         $data['seller_id'] = $seller->id;
 
         $product = Product::create($data);
@@ -105,6 +106,7 @@ class SellerProductController extends ApiController
             'name',
             'description',
             'quantity',
+            'image'
         ]));
 
         if ($request->has('status')) {
@@ -113,6 +115,12 @@ class SellerProductController extends ApiController
             if ($product->isAvailable() && !$product->categories()->count()) {
                 return $this->errorResponse('An active product must have at least one category.', 409);
             }
+        }
+
+        if ($request->hasFile('image')) {
+            Storage::delete($product->image);
+
+            $product->image = $request->image->store('');
         }
 
         if ($product->isClean()) {
@@ -133,6 +141,8 @@ class SellerProductController extends ApiController
     public function destroy(Seller $seller, Product $product)
     {
         $this->checkSeller($seller, $product);
+
+        Storage::delete($product->image);
 
         $product->delete();
 
