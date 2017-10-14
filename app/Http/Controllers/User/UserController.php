@@ -95,11 +95,14 @@ class UserController extends ApiController
             'admin' => 'in:' . User::ADMIN_USER . ',' . User::REGULAR_USER
         ];
 
+
+        $this->validate($request, $rules);
+
         if ($request->has('name')) {
             $user->name = $request->name;
         }
 
-        if ($request->has('email') && $user->email != $user->email) {
+        if ($request->has('email') && $user->email != $request->email) {
             $user->verified = User::UNVERIFIED_USER;
             $user->verification_token = User::generateVerificationCode();
             $user->email = $request->email;
@@ -108,6 +111,7 @@ class UserController extends ApiController
         if ($request->has('password')) {
             $user->password = bcrypt($request->password);
         }
+        // dd($user);
 
         if ($request->has('admin')) {
             if (!$user->isVerified()) {
