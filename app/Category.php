@@ -14,7 +14,7 @@ class Category extends Model
 	
 	protected $dates = ['deleted_at'];
 
-	public $tranformer = CategoryTransformer::class;
+	public $transformer = CategoryTransformer::class;
 
     protected $fillable = [
         'name',

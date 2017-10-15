@@ -29,7 +29,7 @@ trait ApiResponser
         $transformer = $collection->first()->transformer;
 
         $collection = $this->transformData($collection, $transformer);
-        return $this->successResponse(['data' => $collection], $code);
+        return $this->successResponse($collection, $code);
     }
 
     protected function showOne (Model $instance, $code = 200)
@@ -37,9 +37,9 @@ trait ApiResponser
         // Get instance transformer
         $transformer = $instance->transformer;
 
-        $model = $this->transformData($instance, $transformer);
+        $instance = $this->transformData($instance, $transformer);
 
-        return $this->successResponse(['data' => $model], $code);
+        return $this->successResponse($instance, $code);
     }
 
     protected function message($message, $code = 200)
