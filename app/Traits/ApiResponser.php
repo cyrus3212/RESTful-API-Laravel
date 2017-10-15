@@ -19,15 +19,38 @@ trait ApiResponser
 
     protected function showAll (Collection $collection, $code = 200) 
     {
+        // Avoid empty collection to be transformed
+        // return just empty collection
+        if ($collection->isEmpty()) {
+            return $this->successResponse(['data' => $collection], $code);
+        }
+        // Get the transformer of its collection
+        // Use the first element collection to obtain its transformer
+        $transformer = $collection->first()->transformer;
+
+        $collection = $this->transformData($collection, $transformer);
         return $this->successResponse(['data' => $collection], $code);
     }
 
-    protected function showOne (Model $model, $code = 200) 
+    protected function showOne (Model $instance, $code = 200)
     {
+        // Get instance transformer
+        $transformer = $instance->transformer;
+
+        $model = $this->transformData($instance, $transformer);
+
         return $this->successResponse(['data' => $model], $code);
     }
 
-    protected function message($message, $code = 200) {
+    protected function message($message, $code = 200)
+    {
         return $this->successResponse(['data' => $message], $code);
+    }
+
+    protected function transformData($data, $transformer)
+    {
+        $transformation = fractal($data, new $transformer);
+         // dd($transformation->toArray());
+        return $transformation->toArray();
     }
 }
